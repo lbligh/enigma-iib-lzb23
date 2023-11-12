@@ -285,19 +285,24 @@ def main():
     gen_arrays()
 
     enigma = Enigma(
-        rotors="321",
-        rings="ABX",
+        rotors="532",
+        rings="ABC",
         reflector="B",
-        plugboard=["AQ"],
-        initial_pos="AAZ",
+        plugboard=["AF"],
+        initial_pos="BCD",
         letters=True,
         verbose=False,
     )
+    path = "/Users/lzb/Library/CloudStorage/OneDrive-UniversityofCambridge/Documents/IIB/Engima/enigma-iib-lzb23/c_conversion/"
+    with open(path + "input.txt") as py_in:
+        ip = py_in.readlines()[0]
 
-    string_input = input("Enter String")
-    for i in string_input:
-        print(enigma.keypress(i), end="")
-    print()
+    string_input = ip  # input("Enter String")
+    with open(path + "pyout.txt", "w") as py_out:
+        for i in string_input:
+            # print(enigma.keypress(i), end="")
+            py_out.write(enigma.keypress(i))
+        print()
 
 
 if __name__ == "__main__":
