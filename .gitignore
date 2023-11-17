@@ -45,3 +45,8 @@ Thumbs.db
 
 **/*auto*
 
+
+# Offline testing files
+test.c
+test.out
+test.py
