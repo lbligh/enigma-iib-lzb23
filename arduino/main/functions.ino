@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "main.h"
 #include "enigma.h"
@@ -33,7 +34,6 @@ void gen_arrays()
     }
 }
 
-
 void gen_enigma(Enigma *ptr,
                 char rotor_lets[3],
                 char rings_lets[3],
@@ -56,8 +56,9 @@ void gen_enigma(Enigma *ptr,
     }
 
     int plugboard[26] = {0};
-    for (int i =0; i<26; i++) {
-      plugboard[i] = -1;
+    for (int i = 0; i < 26; i++)
+    {
+        plugboard[i] = -1;
     }
 
     int turnovers[3];
@@ -200,13 +201,13 @@ void print_windows(Enigma *ptr, bool letters)
         sprintf(buffer, "Windows : %c, %c, %c", ptr->vis_pos[0] + 'A', ptr->vis_pos[1] + 'A', ptr->vis_pos[2] + 'A');
     else
         sprintf(buffer, "Windows : %d, %d, %d", ptr->vis_pos[0], ptr->vis_pos[1], ptr->vis_pos[2]);
-  Serial.println(buffer);
+    Serial.println(buffer);
 }
 
-int encode(Enigma *ptr, int key_pressed)
+int encode(Enigma *ptr, int key_num)
 {
     // printf("in encode");
-    int o_o_plugboard1 = plugboard(ptr, key_pressed);
+    int o_o_plugboard1 = plugboard(ptr, key_num);
     int o_o_etw_l = etw_l(ptr, o_o_plugboard1);
     int o_o_rots_l = rotors_l(ptr, o_o_etw_l);
     int o_o_ukw = ukw(ptr, o_o_rots_l);
@@ -216,67 +217,103 @@ int encode(Enigma *ptr, int key_pressed)
     return o_o_plugboard2;
 }
 
-char keypress(Enigma *ptr, char key_pressed)
+int key_down(Enigma *ptr, int key_num)
 {
-    // printf("in keypress");
-    if (!isalpha(key_pressed))
-    {
-        return key_pressed;
-    }
+
     rotate(ptr);
 
-    int key_num = (int)toupper(key_pressed) - 'A'; // "A" -> integer 0
+    // int key_num = (int)toupper(key_pressed) - 'A'; // "A" -> integer 0
     int x = encode(ptr, key_num);
-    return (char)x + 'A';
+    light_on(x);
+    Serial.print("Light turned on: ");
+    Serial.println(x);
+    return x;
 }
 
-int light_on (char key_pressed) {
-
-  int key_num;
-  if (key_pressed >= 'a' && key_pressed <= 'z') {
-    key_num = (int)key_pressed - 'a';
-  }
-  else {
-    key_num = (int)key_pressed - 'A';
-  }
-
-
-
-  
-  int cols [26] = {1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0};
-  int rows [26] = {0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5};
-  
-
-  int key_col = cols[key_num];
-  int key_row = rows[key_num];
-
-  Serial.print(key_pressed);
-  Serial.print(" , num = ");
-  Serial.print(key_num);
-  Serial.print(" , row = ");
-  Serial.print(key_row);
-  Serial.print(" , col = ");
-  Serial.println(key_col);
-
-  /*
-  
-  */
-
-  for (int row = 0; row < 3; row ++) {
-    digitalWrite(l_row_pins[row], key_row == row ? 1: 0);
-  }
-  for (int col = 0; col <9;col ++) {
-    digitalWrite(l_col_pins[col], key_col == col ? 1: 0);
-  }
-  delay (500);
-
-  for (int row = 0; row < 3; row ++) {
-    digitalWrite(l_row_pins[row], 0);
-  }
-  for (int col = 0; col <9; col ++) {
-    digitalWrite(l_col_pins[col], 0);
-  }
+void key_up(int key_num)
+{
+    Serial.print("Light turned off: ");
+    Serial.println(key_num);
+    light_off(key_num);
 }
 
+void light_on(int key_num)
+{
 
+    int rows[26] = {1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0};
+    int cols[26] = {0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5};
 
+    int key_col = cols[key_num];
+    int key_row = rows[key_num];
+
+    /*
+    PORTD is 7-0
+    DDRD is pinmodes
+
+    PORTB is 13-8
+    DDRB is pinmodes
+
+    rows are 2-4
+    cols are 5-13
+
+    PORTB,PORTD is pins 13-0
+        = col9-col1,row3-row1, rx, tx
+
+    uint16_t = x,x,col9-col1,row3-row1, rx, tx
+
+    */
+
+    // left shift 15 to get 1 in MSB
+    //  right shift to get to correct spot
+    //  2 unused, 9 columns, 2 - key_row to reverse zero indexed
+    uint16_t row_bin = 1 << (15 - (2 + 9 + 2 - key_row));
+    // 2 unused, 8-key_col to reverse zero indexed
+    uint16_t col_bin = 1 << (15 - (2 + 8 - key_col));
+
+    uint8_t port_d = ((row_bin | col_bin) & 0xFF);        // get LSByte of both
+    uint8_t port_b = (((row_bin | col_bin) >> 8) & 0xFF); // get MSB of both
+
+    // Serial.print((char)(key_num + 'A'));
+    // Serial.print(" , num = ");
+    // Serial.print(key_num);
+    // Serial.print(" , row (1-3)= ");
+    // Serial.print(key_row + 1);
+    // Serial.print(" , col(1-9) = ");
+    // Serial.print(key_col + 1);
+    // Serial.print(" , portb = ");
+    // Serial.print(port_b);
+    // Serial.print(" , portd = ");
+    // Serial.println(port_d);
+
+    PORTB |= port_b;
+    PORTD |= port_d;
+}
+
+void light_off(int key_num)
+{
+
+    int rows[26] = {1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0};
+    int cols[26] = {0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5};
+
+    int key_col = cols[key_num];
+    int key_row = rows[key_num];
+
+    // left shift 15 to get 1 in MSB
+    //  right shift to get to correct spot
+    //  2 unused, 9 columns, 2 - key_row to reverse zero indexed
+    uint16_t row_bin = 1 << (15 - (2 + 9 + 2 - key_row));
+    // 2 unused, 8-key_col to reverse zero indexed
+    uint16_t col_bin = 1 << (15 - (2 + 8 - key_col));
+
+    uint8_t port_d = ~((row_bin | col_bin) & 0xFF);        // get LSByte of both and invert
+    uint8_t port_b = ~(((row_bin | col_bin) >> 8) & 0xFF); // get MSB of both and invert
+
+    PORTB &= port_b;
+    PORTD &= port_d;
+}
+
+void all_lights_off(void)
+{
+    PORTB &= 0b000000;
+    PORTD &= 0;
+}

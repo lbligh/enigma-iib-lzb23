@@ -21,8 +21,6 @@
 #define L_COL_8 12
 #define L_COL_9 13
 
-
-
 // CONSTANT DEFINITIONS
 #define ECG_TIME 5000000 // microseconds
 
