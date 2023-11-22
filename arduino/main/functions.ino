@@ -357,7 +357,9 @@ void light_on(int light_num)
     // PORTA : col 5-1, row3-1
     // PORTB : col 9-6
 
-    uint16_t bin = (0b1 << 3 + light_col) | 0b1 << light_row; // get MSB of both
+    // generate bin
+    uint16_t bin = (0b1 << 3 + light_col) | (0b1 << light_row);
+    // |= to turn on light if off and leave rest
     light_status |= bin;
     lights_update();
 
@@ -418,18 +420,11 @@ void light_off(int light_num)
     uint8_t light_col = light_cols[light_num];
     uint8_t light_row = light_rows[light_num];
 
-    // left shift 15 to get 1 in MSB
-    //  right shift to get to correct spot
-    //  2 unused, 9 columns, 2 - key_row to reverse zero indexed
-    uint16_t row_bin = 1 << (15 - (2 + 9 + 2 - key_row));
-    // 2 unused, 8-key_col to reverse zero indexed
-    uint16_t col_bin = 1 << (15 - (2 + 8 - key_col));
-
-    uint8_t port_d = ~((row_bin | col_bin) & 0xFF);        // get LSByte of both and invert
-    uint8_t port_b = ~(((row_bin | col_bin) >> 8) & 0xFF); // get MSB of both and invert
-
-    PORTB &= port_b;
-    PORTD &= port_d;
+    // generate inverted bin
+    uint16_t bin = ~((0b1 << 3 + light_col) | (0b1 << light_row));
+    // &= to turn off light if on and leave rest
+    light_status &= bin;
+    lights_update();
 }
 
 void all_lights_off(void)
