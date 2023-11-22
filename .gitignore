@@ -47,6 +47,4 @@ Thumbs.db
 
 
 # Offline testing files
-test.c
-test.out
-test.py
+testing/**
