@@ -1,5 +1,5 @@
-#ifndef DEFINITIONS
-#define DEFINITIONS
+#ifndef MAIN_HEADER_FILE
+#define MAIN_HEADER_FILE
 
 #include <stdbool.h>
 #include <Arduino.h>
@@ -8,20 +8,8 @@
 #include "enigma.h"
 
 // PIN DEFINITIONS
-#define L_ROW_1 2
-#define L_ROW_2 3
-#define L_ROW_3 4
 
-#define L_COL_1 5
-#define L_COL_2 6
-#define L_COL_3 7
-#define L_COL_4 8
-#define L_COL_5 9
-#define L_COL_6 10
-#define L_COL_7 11
-#define L_COL_8 12
-#define L_COL_9 13
-
+// IO Expander Addresses
 #define LAMP_IO_ADDR 0x20
 
 // GLOBAL VARIABLE DEFINITIONS

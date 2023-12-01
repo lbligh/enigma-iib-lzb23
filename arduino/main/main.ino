@@ -30,10 +30,10 @@
 // int l_row_pins[3] = {L_ROW_1, L_ROW_2, L_ROW_3};
 // int l_col_pins[9] = {L_COL_1, L_COL_2, L_COL_3, L_COL_4, L_COL_5, L_COL_6, L_COL_7, L_COL_8, L_COL_9};
 
-uint8_t light_rows[26] = {1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0};
-uint8_t light_cols[26] = {0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5};
+uint8_t light_rows[26] = { 1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0 };
+uint8_t light_cols[26] = { 0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5 };
 
-int rotor_nums[5][26];
+uint8_t rotor_nums[5][26];
 
 char rotor_lets[5][26] = {
     "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
@@ -43,25 +43,25 @@ char rotor_lets[5][26] = {
     "VZBRGITYUPSDNHLXAWMJQOFECK",
 };
 
-int ETW_nums[26];
+uint8_t ETW_nums[26];
 char ETW_lets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-int UKW_nums[3][26];
+uint8_t UKW_nums[3][26];
 char UKW_lets[5][26] = {
-    "EJMZALYXVBWFCRQUONTSPIKHGD", // UKW - A
-    "YRUHQSLDPXNGOKMIEBFZCWVJAT", // UKW - B
-    "FVPJIAOYEDRZXWGCTKUQSBNMHL", // UKW - C
+    "EJMZALYXVBWFCRQUONTSPIKHGD",  // UKW - A
+    "YRUHQSLDPXNGOKMIEBFZCWVJAT",  // UKW - B
+    "FVPJIAOYEDRZXWGCTKUQSBNMHL",  // UKW - C
 };
 
-char rotor_notch_lets[5] = {'Y', 'M', 'D', 'R', 'H'};
-char rotor_turnover_lets[5] = {'Q', 'E', 'V', 'J', 'Z'};
+char rotor_notch_lets[5] = { 'Y', 'M', 'D', 'R', 'H' };
+char rotor_turnover_lets[5] = { 'Q', 'E', 'V', 'J', 'Z' };
 
-int rotor_notch_nums[5];
-int rotor_turnover_nums[5];
+uint8_t rotor_notch_nums[5];
+uint8_t rotor_turnover_nums[5];
 
 uint8_t num_keys_pressed = 0;
 // 1 if key is down, 0 if key is up
-uint8_t keys_held_down[26] = {0};
+uint8_t keys_held_down[26] = { 0 };
 uint16_t light_status = 0;
 
 Enigma enigma;
@@ -110,8 +110,7 @@ void light_off(char key_pressed);
 
 void all_lights_off(void);
 
-void setup()
-{
+void setup() {
     // begin serial comms
     Serial.begin(115200);
     Serial.println("Starting Setup");
@@ -121,21 +120,14 @@ void setup()
 
     // Setup lamp IO expander as outputs
     lamp_io.init();
-    lamp_io.portMode(MCP23017Port::A, 0); // Port A as output
-    lamp_io.portMode(MCP23017Port::B, 0); // Port B as output
+    lamp_io.portMode(MCP23017Port::A, 0);  // Port A as output
+    lamp_io.portMode(MCP23017Port::B, 0);  // Port B as output
 
-    lamp_io.writeRegister(MCP23017Register::GPIO_A, 0x00); // Reset port A
-    lamp_io.writeRegister(MCP23017Register::GPIO_B, 0x00); // Reset port B
+    lamp_io.writeRegister(MCP23017Register::GPIO_A, 0x00);  // Reset port A
+    lamp_io.writeRegister(MCP23017Register::GPIO_B, 0x00);  // Reset port B
 
     // set pin modes
-    for (int row = 0; row < 3; row++)
-    {
-        pinMode(l_row_pins[row], OUTPUT);
-    }
-    for (int col = 0; col < 9; col++)
-    {
-        pinMode(l_col_pins[col], OUTPUT);
-    }
+    // Nothing at the moment
 
     // ensure all lights are off
     all_lights_off();
@@ -144,25 +136,24 @@ void setup()
     gen_arrays();
 
     // set initial settings (will change when rotor/stecker/rings detection is done)
-    char rotors[3] = "532"; // 1thru5
+    char rotors[3] = "532";  // 1thru5
     char rings[3] = "ABC";
     int reflector = 1;
-    int plugboard[][2] = {{0, 5}};
+    int plugboard[][2] = { { 0, 5 } };
     int num_leads = sizeof(plugboard) / sizeof(*plugboard);
     char initial_pos[3] = "BCD";
 
     // setup the enigma struct with initial settings
     gen_enigma(p_enigma, rotors, rings, reflector, plugboard, num_leads, initial_pos);
 
-    Serial.println("Setup Done")
+    Serial.println("Setup Done");
 
-        // print the initial settings of the machine - can probably be removed
-        Serial.println("INITIAL SETTINGS: ");
+    // print the initial settings of the machine - can probably be removed
+    Serial.println("INITIAL SETTINGS: ");
     print_windows(p_enigma, 1);
 }
 
-void loop()
-{
+void loop() {
     // char *keyboard = "QWERTZUIOASDFGHJKPYXCVBNML";
     // for (int key = 0; key < 26; key++) {
     //     char c = keyboard[key];
@@ -176,7 +167,7 @@ void loop()
     int x = key_down(p_enigma, c);
     // Serial.println(c);
     delay(1000);
-    key_up(c);
+    key_up(p_enigma, c);
     delay(1000);
 }
 
