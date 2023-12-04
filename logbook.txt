@@ -1,0 +1,6 @@
+1/12/23 Supervision
+    P&I and discussion
+    Work over christmas:
+        Plan rotor and plugboard
+        Do schematic and PCB for old system
+        
