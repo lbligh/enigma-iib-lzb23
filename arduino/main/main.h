@@ -11,6 +11,7 @@
 
 // IO Expander Addresses
 #define LAMP_IO_ADDR 0x20
+#define SWITCH_IO_ADDR 0x21
 
 // GLOBAL VARIABLE DEFINITIONS
 // extern int l_row_pins[3];
