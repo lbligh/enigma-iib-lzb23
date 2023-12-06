@@ -1,0 +1,52 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid c1253333-69bd-4894-a257-a3518ad25b0f)
+
+  (paper "A4")
+
+  (title_block
+    (title "EngimaHut Switch Board")
+  )
+
+  (lib_symbols
+  )
+
+
+  (sheet (at 69.596 19.685) (size 37.846 24.638) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 708550bc-d777-478d-bd79-c59c8faed61e)
+    (property "Sheetname" "switch_board" (at 69.596 18.9734 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "switch_board.kicad_sch" (at 69.596 44.9076 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "enigma_hut"
+        (path "/c1253333-69bd-4894-a257-a3518ad25b0f" (page "3"))
+      )
+    )
+  )
+
+  (sheet (at 17.653 19.431) (size 49.53 24.511) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid f815e3e2-1488-4263-8342-69e8696eb01c)
+    (property "Sheetname" "lamp_board" (at 17.653 18.7194 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "lamp_board.kicad_sch" (at 17.653 44.5266 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "enigma_hut"
+        (path "/c1253333-69bd-4894-a257-a3518ad25b0f" (page "2"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)
