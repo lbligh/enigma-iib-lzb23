@@ -1,2 +1,3 @@
 # ignore source files for test
 src/**
+*.dxf
