@@ -108,7 +108,12 @@ TODO: add received src code for EnigmaHut,
   
 ## Lent
 ### L Week 1 18/01:
-
+- Built up cont. board pcb
+  - Found error in schematic - keyboard MCP23017 reset tied to GND
+  - corrected schematic
+  - bodge fix on pcb
+- Cont. board tested 
+- 
 ### L Week 2 25/01:
 
 ### L Week 3 1/02:
