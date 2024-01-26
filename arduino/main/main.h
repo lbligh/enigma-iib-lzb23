@@ -8,10 +8,13 @@
 #include "enigma.h"
 
 // PIN DEFINITIONS
+#define TEST_SW 2
+#define CAM_1 3
+#define CAM_2 4
 
 // IO Expander Addresses
-#define LAMP_IO_ADDR 0x20
-#define SWITCH_IO_ADDR 0x21
+#define LAMP_IO_ADDR 0x21
+#define SWITCH_IO_ADDR 0x20
 
 // GLOBAL VARIABLE DEFINITIONS
 // extern int l_row_pins[3];
@@ -40,5 +43,7 @@ extern uint16_t light_status;
 
 extern uint8_t light_rows[26];
 extern uint8_t light_cols[26];
+
+extern bool in_test_mode;
 
 #endif

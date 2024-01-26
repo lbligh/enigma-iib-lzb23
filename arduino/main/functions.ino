@@ -11,29 +11,22 @@
 void bin_string(char *buff, uint16_t bin_in);
 void lights_update(void);
 
-void gen_arrays()
-{
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 26; j++)
-        {
+void gen_arrays() {
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 26; j++) {
             rotor_nums[i][j] = rotor_lets[i][j] - 'A';
         }
     }
-    for (int j = 0; j < 26; j++)
-    {
+    for (int j = 0; j < 26; j++) {
         ETW_nums[j] = ETW_lets[j] - 'A';
     }
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 26; j++)
-        {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 26; j++) {
             UKW_nums[i][j] = UKW_lets[i][j] - 'A';
         }
     }
 
-    for (int i = 0; i < 5; i++)
-    {
+    for (int i = 0; i < 5; i++) {
         rotor_notch_nums[i] = rotor_notch_lets[i] - 'A';
         rotor_turnover_nums[i] = rotor_turnover_lets[i] - 'A';
     }
@@ -43,39 +36,27 @@ void gen_enigma(Enigma *ptr,
                 char rotor_lets[3],
                 char rings_lets[3],
                 int reflector,
-                int temp_plugboard[][2],
-                int num_leads,
-                char vis_pos_lets[3])
-{
+                int plugboard[26],
+                char vis_pos_lets[3]) {
     int vis_pos[3];
     int rings[3];
     int rot_pos[3];
     int rotors[3];
 
-    for (int i = 0; i < 3; i++)
-    {
+    // memcpy(ptr->plugboard, plugboard, sizeof(ptr->plugboard));
+
+
+
+    for (int i = 0; i < 3; i++) {
         rotors[i] = (int)rotor_lets[i] - '1';
         vis_pos[i] = (int)vis_pos_lets[i] - 'A';
         rings[i] = (int)rings_lets[i] - 'A';
         rot_pos[i] = (vis_pos[i] - rings[i] + 26) % 26;
     }
 
-    int plugboard[26] = {0};
-    for (int i = 0; i < 26; i++)
-    {
-        plugboard[i] = -1;
-    }
-
     int turnovers[3];
-    for (int i = 0; i < 3; i++)
-    {
+    for (int i = 0; i < 3; i++) {
         turnovers[i] = rotor_turnover_nums[rotors[i]];
-    }
-
-    for (int i = 0; i < num_leads; i++)
-    {
-        plugboard[temp_plugboard[i][0]] = temp_plugboard[i][1];
-        plugboard[temp_plugboard[i][1]] = temp_plugboard[i][0];
     }
 
     memcpy(ptr->rotors, rotors, sizeof(ptr->rotors));
@@ -88,48 +69,41 @@ void gen_enigma(Enigma *ptr,
     ptr->counter = 0;
 }
 
-void rotate(Enigma *ptr)
-{
+void rotate(Enigma *ptr) {
     ptr->counter += 1;
-    int rots[] = {0, 0, 1}; // RH rotor always rotates
+    int rots[] = { 0, 0, 1 };  // RH rotor always rotates
 
-    for (int i = 0; i < 2; i++)
-    {
+    for (int i = 0; i < 2; i++) {
 
-        if (ptr->vis_pos[i + 1] == ptr->turnovers[i + 1])
-        {
-            { // if rotor to right is in position where rotor should rotate
+        if (ptr->vis_pos[i + 1] == ptr->turnovers[i + 1]) {
+            {  // if rotor to right is in position where rotor should rotate
                 rots[i] = 1;
-                rots[i + 1] = 1; // Notch rotate both rotors
+                rots[i + 1] = 1;  // Notch rotate both rotors
             }
         }
     }
-    for (int i = 2; i > -1; i--)
-    {
+    for (int i = 2; i > -1; i--) {
         ptr->vis_pos[i] = (ptr->vis_pos[i] + rots[i] + 26) % 26;
         ptr->rot_pos[i] = (ptr->rot_pos[i] + rots[i] + 26) % 26;
     }
 }
 
-int plugboard(Enigma *ptr, int letter_in)
-{
-    int letter_out = (ptr->plugboard[letter_in] == -1) ? letter_in : ptr->plugboard[letter_in];
+int plugboard(Enigma *ptr, int letter_in) {
+    // int letter_out = (ptr->plugboard[letter_in] == -1) ? letter_in : ptr->plugboard[letter_in];
+    int letter_out = ptr->plugboard[letter_in];
     return letter_out;
 }
 
-int where(uint8_t arr[26], int n)
-{
+int where(uint8_t arr[26], int n) {
     // Func to find index of first instance of n in array arr
-    for (int i = 0; i < 26; i++)
-    {
+    for (int i = 0; i < 26; i++) {
         if (arr[i] == n)
             return i;
     }
     return 100;
 }
 
-int etw_l(Enigma *ptr, int letter_in)
-{
+int etw_l(Enigma *ptr, int letter_in) {
     // printf("etwl %d|", letter_in);
     int letter_out = where(ETW_nums, letter_in);
 
@@ -139,8 +113,7 @@ int etw_l(Enigma *ptr, int letter_in)
     return letter_out;
 }
 
-int etw_r(Enigma *ptr, int letter_in)
-{
+int etw_r(Enigma *ptr, int letter_in) {
     // printf("etwr %d|", letter_in);
     int letter_out = ETW_nums[letter_in];
     // if self.verbose:
@@ -148,20 +121,17 @@ int etw_r(Enigma *ptr, int letter_in)
     return letter_out;
 }
 
-int ukw(Enigma *ptr, int letter_in)
-{
+int ukw(Enigma *ptr, int letter_in) {
     // printf("ukw %d|", letter_in);
     int letter_out = UKW_nums[ptr->reflector][letter_in];
     return letter_out;
 }
 
-int rotors_l(Enigma *ptr, int let_in)
-{
+int rotors_l(Enigma *ptr, int let_in) {
     // printf("rot_l %d|", let_in);
     int letter_in = let_in;
     int letter_out;
-    for (int rotor = 2; rotor > -1; rotor--)
-    {
+    for (int rotor = 2; rotor > -1; rotor--) {
         letter_out = (rotor_nums[ptr->rotors[rotor]][(letter_in + ptr->rot_pos[rotor] + 26) % 26] - ptr->rot_pos[rotor] + 26) % 26;
         /*
         Assumes that o/p of previous stage has 0 at window
@@ -176,13 +146,11 @@ int rotors_l(Enigma *ptr, int let_in)
     return letter_out;
 }
 
-int rotors_r(Enigma *ptr, int let_in)
-{
+int rotors_r(Enigma *ptr, int let_in) {
     // printf("rot_r %d|", let_in);
     int letter_in = let_in;
     int letter_out;
-    for (int rotor = 0; rotor < 3; rotor++)
-    {
+    for (int rotor = 0; rotor < 3; rotor++) {
         int i = where(rotor_nums[ptr->rotors[rotor]], (letter_in + ptr->rot_pos[rotor] + 26) % 26);
         /*
         Assumes that o/p of previous stage has 0 at top contact
@@ -199,8 +167,7 @@ int rotors_r(Enigma *ptr, int let_in)
     return letter_out;
 }
 
-void print_windows(Enigma *ptr, bool letters)
-{
+void print_windows(Enigma *ptr, bool letters) {
     char buffer[100];
     if (letters)
         sprintf(buffer, "Windows : %c, %c, %c", ptr->vis_pos[0] + 'A', ptr->vis_pos[1] + 'A', ptr->vis_pos[2] + 'A');
@@ -209,8 +176,7 @@ void print_windows(Enigma *ptr, bool letters)
     Serial.println(buffer);
 }
 
-int encode(Enigma *ptr, int key_num)
-{
+int encode(Enigma *ptr, int key_num) {
     // printf("in encode");
     int o_o_plugboard1 = plugboard(ptr, key_num);
     int o_o_etw_l = etw_l(ptr, o_o_plugboard1);
@@ -226,8 +192,7 @@ int key_down(Enigma *ptr, int key_num)
 
 {
     // only rotate if no keys held down already
-    if (!num_keys_pressed)
-    {
+    if (!num_keys_pressed) {
         rotate(ptr);
     }
 
@@ -237,13 +202,12 @@ int key_down(Enigma *ptr, int key_num)
 
     int encoded = encode(ptr, key_num);
 
-    Serial.print((char)key_num + 'A');
-    Serial.print("DOWN, ");
+    Serial.print((char)(key_num + 'A'));
+    Serial.print(" DOWN, ");
 
     // if pressed key's pair in current encoding is already pressed
 
-    if (keys_held_down[encoded])
-    {
+    if (keys_held_down[encoded]) {
         // turn off lamp of current key pressed as no circuit
         light_off(key_num);
         // do not turn on lamp that key_num encodes to
@@ -258,25 +222,23 @@ int key_down(Enigma *ptr, int key_num)
     // int key_num = (int)toupper(key_pressed) - 'A'; // "A" -> integer 0
     light_on(encoded);
 
-    Serial.print((char)encoded + 'A');
+    Serial.print((char)(encoded + 'A'));
     Serial.println(" light ON");
 
     return encoded;
 }
 
-void key_up(Enigma *ptr, int key_num)
-{
+void key_up(Enigma *ptr, int key_num) {
 
     num_keys_pressed -= 1;
     keys_held_down[key_num] = 0;
 
-    Serial.print((char)key_num + 'A');
-    Serial.print("UP");
+    Serial.print((char)(key_num + 'A'));
+    Serial.print(" UP");
 
     uint8_t encoded = encode(ptr, key_num);
     // if the keys pair is held down
-    if (keys_held_down[encoded])
-    {
+    if (keys_held_down[encoded]) {
         // turn on lamp of current key pressed as circuit now complete
         light_on(key_num);
 
@@ -288,70 +250,15 @@ void key_up(Enigma *ptr, int key_num)
     }
 
     Serial.print(", ");
-    Serial.print((char)encoded + 'A');
+    Serial.print((char)(encoded + 'A'));
     Serial.println(" light OFF");
 
     // following line works as rotation only occurs on first held down keypress
     light_off(encoded);
 }
 
-// void light_on_OLD(int key_num)
-/*
-{
 
-    int rows[26] = {1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0};
-    int cols[26] = {0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5};
-
-    int key_col = cols[key_num];
-    int key_row = rows[key_num];
-
-
-    // PORTD is 7-0
-    // DDRD is pinmodes
-
-    // PORTB is 13-8
-    // DDRB is pinmodes
-
-    // rows are 2-4
-    // cols are 5-13
-
-    // PORTB,PORTD is pins 13-0
-    //     = col9-col1,row3-row1, rx, tx
-
-    // uint16_t = x,x,col9-col1,row3-row1, rx, tx
-
-
-
-    // left shift 15 to get 1 in MSB
-    //  right shift to get to correct spot
-    //  2 unused, 9 columns, 2 - key_row to reverse zero indexed
-    uint16_t row_bin = 1 << (15 - (2 + 9 + 2 - key_row));
-    // 2 unused, 8-key_col to reverse zero indexed
-    uint16_t col_bin = 1 << (15 - (2 + 8 - key_col));
-
-    uint8_t row = 0b1 << key_row;
-    uint16_t col = 0b1 << key_col + 3 uint8_t port_d = ((row_bin | col_bin) & 0xFF); // get LSByte of both
-    uint8_t port_b = (((row_bin | col_bin) >> 8) & 0xFF);                            // get MSB of both
-
-    // Serial.print((char)(key_num + 'A'));
-    // Serial.print(" , num = ");
-    // Serial.print(key_num);
-    // Serial.print(" , row (1-3)= ");
-    // Serial.print(key_row + 1);
-    // Serial.print(" , col(1-9) = ");
-    // Serial.print(key_col + 1);
-    // Serial.print(" , portb = ");
-    // Serial.print(port_b);
-    // Serial.print(" , portd = ");
-    // Serial.println(port_d);
-
-    PORTB |= port_b;
-    PORTD |= port_d;
-}
-*/
-
-void light_on(int light_num)
-{
+void light_on(int light_num) {
     uint8_t light_col = light_cols[light_num];
     uint8_t light_row = light_rows[light_num];
 
@@ -378,47 +285,21 @@ void light_on(int light_num)
     // Serial.println(buffer);
 }
 
-void bin_string(char *buff, uint16_t bin_in)
-{
+void bin_string(char *buff, uint16_t bin_in) {
     uint16_t temp = bin_in;
     buff[16] = '\0';
-    for (int x = 15; x >= 0; x--)
-    {
+    for (int x = 15; x >= 0; x--) {
         buff[x] = (char)((temp % 2) + '0');
         temp = temp >> 1;
     }
 }
 
-void lights_update(void)
-{
+void lights_update(void) {
     lamp_io.write(light_status);
 }
 
-// void light_off_OLD(int key_num)
-/*{
 
-int rows[26] = {1, 2, 2, 1, 0, 1, 1, 1, 0, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 0, 0, 2, 0, 2, 2, 0};
-int cols[26] = {0, 5, 3, 2, 2, 3, 4, 5, 7, 6, 7, 8, 7, 6, 8, 0, 0, 3, 1, 4, 6, 4, 1, 2, 1, 5};
-
-int key_col = cols[key_num];
-int key_row = rows[key_num];
-
-// left shift 15 to get 1 in MSB
-//  right shift to get to correct spot
-//  2 unused, 9 columns, 2 - key_row to reverse zero indexed
-uint16_t row_bin = 1 << (15 - (2 + 9 + 2 - key_row));
-// 2 unused, 8-key_col to reverse zero indexed
-uint16_t col_bin = 1 << (15 - (2 + 8 - key_col));
-
-uint8_t port_d = ~((row_bin | col_bin) & 0xFF);        // get LSByte of both and invert
-uint8_t port_b = ~(((row_bin | col_bin) >> 8) & 0xFF); // get MSB of both and invert
-
-PORTB &= port_b;
-PORTD &= port_d;
-}*/
-
-void light_off(int light_num)
-{
+void light_off(int light_num) {
     uint8_t light_col = light_cols[light_num];
     uint8_t light_row = light_rows[light_num];
 
@@ -429,8 +310,7 @@ void light_off(int light_num)
     lights_update();
 }
 
-void all_lights_off(void)
-{
+void all_lights_off(void) {
     light_status = 0;
     lights_update();
 }
