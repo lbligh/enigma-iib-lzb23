@@ -113,7 +113,11 @@ TODO: add received src code for EnigmaHut,
   - corrected schematic
   - bodge fix on pcb
 - Cont. board tested 
-- 
+- Tony's replica dismantled 
+  - Found diff cont board - 6.5V lamps - dimmable
+- Started prototyping plugboard
+  - Lasercut MDF plate with binding post holes
+  - wrote test code for first 8 letters on MCP23017.
 ### L Week 2 25/01:
 
 ### L Week 3 1/02:
