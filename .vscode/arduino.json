@@ -1,6 +1,7 @@
 {
-    "board": "arduino:avr:uno",
-    "port": "/dev/tty.usbmodem141101",
+    "board": "arduino:avr:nano",
+    "port": "/dev/tty.usbserial-A10N7LW7",
     "programmer": "avrisp",
-    "sketch": "testing/keypad_initial/keypad_initial.ino"
+    "sketch": "testing/keypad_initial/keypad_initial.ino",
+    "configuration": "cpu=atmega328"
 }
