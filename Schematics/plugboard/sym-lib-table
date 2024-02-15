@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "TSM-104-01-T-SH-A")(type "KiCad")(uri "${KIPRJMOD}/TSM-104-01-T-SH-A/TSM-104-01-T-SH-A.kicad_sym")(options "")(descr ""))
+)
