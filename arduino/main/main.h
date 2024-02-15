@@ -13,8 +13,15 @@
 #define CAM_2 4
 
 // IO Expander Addresses
-#define LAMP_IO_ADDR 0x21
 #define SWITCH_IO_ADDR 0x20
+#define LAMP_IO_ADDR 0x20 + 0b01
+
+#define PBOARD_EXP_1 0x20 + 0b010
+#define PBOARD_EXP_2 0x20 + 0b011
+
+// IO expander externs
+extern MCP23017 pboard_mcp1;
+extern MCP23017 pboard_mcp2;
 
 // GLOBAL VARIABLE DEFINITIONS
 // extern int l_row_pins[3];
@@ -22,12 +29,12 @@
 
 extern uint8_t rotor_nums[5][26];
 
-extern char rotor_lets[5][26];
+extern char rotor_lets[5][27];
 extern uint8_t ETW_nums[26];
 extern char ETW_lets[26];
 
 extern uint8_t UKW_nums[3][26];
-extern char UKW_lets[5][26];
+extern char UKW_lets[3][27];
 
 extern char rotor_notch_lets[5];
 extern char rotor_turnover_lets[5];
