@@ -118,13 +118,45 @@ TODO: add received src code for EnigmaHut,
 - Started prototyping plugboard
   - Lasercut MDF plate with binding post holes
   - wrote test code for first 8 letters on MCP23017.
+- Met Tim 23/01
+  - Demoed new control board all working in Tony's replica
 ### L Week 2 25/01:
+- Completed MDF prototype of plugboard 
+  - Initially could detect whole plugboard in 240ms
+  - Changed I2C clock to 400 kHz
+  - Changed to bitwise logic instead of string method to decrease overhead
+- CAD model of plugboard fascia
+- Schematic of Plugboard system drawn
+- Tim meeting 30/01 
+  - Decided to focus on rotary encoder style relative rotor position detection
+  - Discussed new turnover mechanism allowing for other rotors
+- Started PCB design for plugboard
 
 ### L Week 3 1/02:
+- Continued pluboard PCB design
+  - Nut OD 11.38mm, radius 5.69
+  - Bolt OD 7.938, radius 3.969~4
+  - Move everything down 2mm to fit nuts in
+- Finished PCB design and ordered to be manufactured
+- Tim meeting 06/02 postponed due to illness
 
 ### L Week 4 8/02:
+- Tim Meeting 08/02
+  - Discussed work on plugboard
+  - Discussed plan for rotor work
+- Created CAD model of rotor for testbed
+- Investigated methods of reading rotary encoders
+- Settled on ATTiny per rotor, acting as I2C slave to send rotor posns
+- Parts for testbed ordered as well as for plugboard pcb.
+- Began to implement plugboard code into main codebase
+- Tim Meeting 14/02
+  - Discussed progress on pboard and rotors
+  - Lent P&I - all happy
 
 ### L Week 5 15/02:
+- Finished initial addition of plugboard code to main code base
+- Added documentation for all functions in functions.ino 
+- Some refactoring of code
 
 ### L Week 6 22/02:
 
