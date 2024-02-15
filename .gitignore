@@ -46,6 +46,7 @@ Thumbs.db
 **/*auto*
 
 
-# Offline testing files
+# Offline files
 testing/**
-EnigmaHut\ Drawings/**
+EnigmaHut_Drawings/**
+.vscode/**
