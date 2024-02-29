@@ -286,6 +286,16 @@ void print_windows(Enigma *ptr, bool letters)
     else
         sprintf(buffer, "Windows : %d, %d, %d", ptr->vis_pos[0], ptr->vis_pos[1], ptr->vis_pos[2]);
     Serial.println(buffer);
+
+    char output[100];
+    for (int i = 0; i < 26; i++)
+    {
+        if (i == ptr->plugboard[i])
+            continue;
+
+        sprintf(output, "Letter %c encodes to %c", (char)(i + 'A'), (char)(ptr->plugboard[i] + 'A'));
+        Serial.println(output);
+    }
 }
 
 /*!
@@ -557,14 +567,14 @@ void get_plugboard_settings(int *plugboard)
 
         if (full_read < 0xFFFFFFFF)
         {
-            uint8_t connected = log(~full_read) / log(2);
-            if (plugboard[nums[connected]] == nums[connected])
+            uint8_t connected = round(log(~full_read) / log(2));
+            if (plugboard[connected] == connected)
             {
                 // Serial.print(lets[connected]);
                 // Serial.print(" & ");
                 // Serial.println(lets[pin]);
-                plugboard[nums[pin]] = nums[connected];
-                plugboard[nums[connected]] = nums[pin];
+                plugboard[pin] = connected;
+                plugboard[connected] = pin;
             }
         }
     }

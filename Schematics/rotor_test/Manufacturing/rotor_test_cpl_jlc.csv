@@ -1,0 +1,4 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+C1,10u,C_0603_1608Metric,63.401,-55.88,90,top
+C2,100n,C_0603_1608Metric,64.9224,-55.88,90,top
+U1,ATtiny202-SS,SOIC-8_3.9x4.9mm_P1.27mm,68.58,-54.356,0,top

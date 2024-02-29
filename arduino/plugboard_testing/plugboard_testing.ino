@@ -46,8 +46,10 @@ void bin_string_32(char *buff, uint32_t bin_in) {
 
 void setup() {
     Wire.begin();
-    Wire.setClock(400000);
+    // Wire.setClock(400000);
     Serial.begin(115200);
+
+    Serial.println("Starting");
 
     pboard_mcp1.init();
     pboard_mcp1.portMode(MCP23017Port::A, 0xFF, 0xFF, 0x00);  // Port A as input
@@ -73,14 +75,16 @@ void setup() {
 }
 
 char buff[33];
-char *buff_ptr;
+char buff_ptr[33];
 
-char *lets = "QWERTZUIOASDFGHJKPYXCVBNML";
-uint8_t nums[26] = { 16, 22, 4, 17, 19, 25, 20, 8, 14, 0, 18, 3, 5, 6, 7, 9, 10, 15, 24, 23, 2, 21, 1, 13, 12, 11 };  // num to pin mapping
+// char *lets = "QWERTZUIOASDFGHJKPYXCVBNML";
+// uint8_t nums[26] = { 16, 22, 4, 17, 19, 25, 20, 8, 14, 0, 18, 3, 5, 6, 7, 9, 10, 15, 24, 23, 2, 21, 1, 13, 12, 11 };  // num to pin mapping
+
+char *lets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+uint8_t nums[26] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 };  // num to pin mapping
+
 
 void loop() {
-
-    // Serial.println("\n\nSTARTING\n\n");
     uint32_t full_read;
     uint32_t portMap = 1;
     uint8_t portMapBytes_0;
@@ -105,6 +109,7 @@ void loop() {
         portMapBytes_3 = portMap >> 24;  // therefore no mask needed
 
 
+
         pboard_mcp1.portMode(MCP23017Port::A, ~portMapBytes_0);  // set pinmodes
         pboard_mcp1.portMode(MCP23017Port::B, ~portMapBytes_1);  // one pin output at a time
         pboard_mcp2.portMode(MCP23017Port::A, ~portMapBytes_2);
@@ -114,29 +119,24 @@ void loop() {
 
         portMap = portMap << 1;  // shift so next pin is selected
 
+
         full_read = ((uint32_t)pboard_mcp2.read() << 16) + pboard_mcp1.read() + ((uint32_t)1 << pin);
 
-
-
         // bin_string_32(buff, full_read);
+        // Serial.println(buff);
 
-        // buff_ptr = strrev(buff);
-        // Serial.println(buff_ptr);
-
-
-        // full_read += (uint32_t)1 << pin;
         if (full_read < 0xFFFFFFFF) {
-            uint8_t connected = log(~full_read) / log(2);
-            if (plugboard[nums[connected]] == nums[connected]) {
+            uint8_t connected = round(log(~full_read) / log(2));
+            if (plugboard[connected] == connected) {
                 // Serial.print(lets[connected]);
                 // Serial.print(" & ");
                 // Serial.println(lets[pin]);
-                    plugboard[nums[pin]] = nums[connected];
-                    plugboard[nums[connected]] = nums[pin];
+                plugboard[pin] = connected;
+                plugboard[connected] = pin;
             }
         }
     }
-    
+
     unsigned long int time = micros() - start;
     Serial.println(time);
 
@@ -156,5 +156,6 @@ void loop() {
     // Serial.println(buff);
     // delay(200);
     delay(1000);
-
+    // while (1)
+    //     ;
 }

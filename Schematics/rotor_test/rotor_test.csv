@@ -1,0 +1,14 @@
+"Source:","/Users/lzb/Library/CloudStorage/OneDrive-UniversityofCambridge/Documents/IIB/Engima/enigma-iib-lzb23/testing/rotor_test/rotor_test.kicad_sch"
+"Date:","2024 February 15, Thursday 18:15:33"
+"Tool:","Eeschema 7.0.2-0"
+"Generator:","/Applications/KiCad/KiCad.app/Contents/SharedSupport/plugins/bom_csv_grouped_by_value.py"
+"Component Count:","7"
+
+"Collated Components:"
+
+"Item","Qty","Reference(s)","Value","LibPart","Footprint","Datasheet","DNP","Field4"
+"1","1","C1","10u","Device:C","Capacitor_SMD:C_0603_1608Metric","~","","C96446"
+"2","1","C2","100n","Device:C","Capacitor_SMD:C_0603_1608Metric","~","","C21120"
+"3","2","J1, J4","Conn_01x03","Connector_Generic:Conn_01x03","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","~","",""
+"4","2","J2, J3","Conn_01x04","Connector_Generic:Conn_01x04","Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical","~","",""
+"5","1","U1","ATtiny202-SS","MCU_Microchip_ATtiny:ATtiny202-SS","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","http://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny202-402-AVR-MCU-with-Core-Independent-Peripherals_and-picoPower-40001969A.pdf","","C2052951"
