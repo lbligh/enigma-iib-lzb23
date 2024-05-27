@@ -1,6 +1,6 @@
 # Lucius Bligh - Enigma IIB Project Logbook
-TODO: add received src code for EnigmaHut,
-## Mich
+### Please also see the GitHub Repository at [https://github.com/lbligh/enigma-iib-lzb23](https://github.com/lbligh/enigma-iib-lzb23)
+## Michaelmas
 
 ### Mich Week < 1:
 - Started Python Enigma simulation 
@@ -214,9 +214,14 @@ TODO: add received src code for EnigmaHut,
 - Restarted work on Report
   
 ### Easter Week 3 9/05 
-- Continued work on report.
+- Continued work on Report.
+- Started building up revision 2 of control board.
 
 ### Easter Week 3 16/05
 - Tim meeting 16/05
 - Tim meeting 22/05
-- 
+- Continued work on report and cont. board rev 2
+- began work on presentation
+
+### Easter Week 4 23/05
+- Continued work.
