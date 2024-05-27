@@ -172,8 +172,51 @@ TODO: add received src code for EnigmaHut,
 - Tim Meeting 27/02
   - Discussed Final Report Plan
   
+### L Week 7 29/02:
+- Continued working on rotor testbed
+  - PCBs arrived, were built up, and tested with rotary encoder
+- Plugboard pcbs arrived
+  - SMD Chips soldered, testing on separate arduino
+  - Error found, two letters were swapped on the PCB - therefore some additional processor overhead needed for this revision
+- Tim Meeting 5/03
+  - Discussed further on Final Report Plan
+  - Demonstrated new plugboard PCB and rotor testbed progress
+### L Week 8 7/03:
+- Plugboard system fully added
+  - New Facade lasercut
+  - PCB attached to facade using EngimaHut sockets and TJF nuts
+  - Full system tested with plugboard - works well!
+- Rotor subsystem
+  - Tested with thumbwheel and microswitches on testbed
+  - Works well - still occaisional missed or double steps if speed is excessive
+- Tim Meeting 12/03
+  - Final P&I - all happy
+  - Discussed work balance over easter
+  - Demonstrated machine put together with plugboard
+  - Continued Final Report Discussion
 
-### L Week 1 29/02:
+## Easter Vac
+### Vac Week 1 14/03
+- Began design of revision 2 of the Control Board
+  - Corrected hole placement
+  - Rotor position on the control board
+  - Dedicated plugboard connector
+  - Programming header on board for serial comms when board installed
 
-### L Week 1 7/03:
+### Vac Week 2 21/03
+- Finished rerouting of rev 2 control board
 
+### Vac Week 3 28/03
+- Ordered Rev 2 Control Board
+  
+## Easter
+### Easter Week 2 2/05
+- Restarted work on Report
+  
+### Easter Week 3 9/05 
+- Continued work on report.
+
+### Easter Week 3 16/05
+- Tim meeting 16/05
+- Tim meeting 22/05
+- 

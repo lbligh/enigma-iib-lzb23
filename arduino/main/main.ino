@@ -152,7 +152,7 @@ void setup() {
 
     // begin I2C
     Wire.begin();
-    // Wire.setClock(400000);
+    Wire.setClock(400000);
 
     // Setup lamp IO expander as outputs
     lamp_io.init();
@@ -259,6 +259,7 @@ void loop() {
                     case PRESSED:
                         // msg = " PRESSED.";
                         key_down(p_enigma, c);
+                        print_windows(p_enigma, 1);
                         break;
                     case HOLD:
                         // msg = " HOLD.";

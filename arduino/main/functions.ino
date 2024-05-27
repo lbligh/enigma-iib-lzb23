@@ -11,8 +11,6 @@
 void bin_string(char *buff, uint16_t bin_in);
 void lights_update(void);
 
-uint8_t nums[26] = {16, 22, 4, 17, 19, 25, 20, 8, 14, 0, 18, 3, 5, 6, 7, 9, 10, 15, 24, 23, 2, 21, 1, 13, 12, 11}; // num to pin mapping
-
 /*!
  * @brief Generates the numeric arrays for encoding from the alphabetic inputs
  */
@@ -293,9 +291,10 @@ void print_windows(Enigma *ptr, bool letters)
         if (i == ptr->plugboard[i])
             continue;
 
-        sprintf(output, "Letter %c encodes to %c", (char)(i + 'A'), (char)(ptr->plugboard[i] + 'A'));
-        Serial.println(output);
+        sprintf(output, "%c%c ", (char)(i + 'A'), (char)(ptr->plugboard[i] + 'A'));
+        Serial.print(output);
     }
+    Serial.println();
 }
 
 /*!
@@ -372,6 +371,8 @@ int key_down(Enigma *ptr, int key_num)
     Serial.print((char)(encoded + 'A'));
     Serial.println(" light ON");
 
+    print_windows(ptr, 0);
+
     return encoded;
 }
 
@@ -409,9 +410,10 @@ void key_up(Enigma *ptr, int key_num)
     Serial.print(", ");
     Serial.print((char)(encoded + 'A'));
     Serial.println(" light OFF");
+    f
 
-    // following line works as rotation only occurs on first held down keypress
-    light_off(encoded);
+        // following line works as rotation only occurs on first held down keypress
+        light_off(encoded);
 }
 
 /*!
@@ -523,6 +525,10 @@ void update_plugboard(Enigma *ptr)
 
     memcpy(ptr->plugboard, plugboard, sizeof(ptr->plugboard));
 }
+
+char *lets = "ABCDEFGHIJKMLNOPQRSTUVWXYZ";
+uint8_t nums[26] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}; // num to pin mapping
+
 /*!
  * @brief Generates the plugboard array
  *
@@ -568,13 +574,13 @@ void get_plugboard_settings(int *plugboard)
         if (full_read < 0xFFFFFFFF)
         {
             uint8_t connected = round(log(~full_read) / log(2));
-            if (plugboard[connected] == connected)
+            if (plugboard[nums[connected]] == nums[connected])
             {
                 // Serial.print(lets[connected]);
                 // Serial.print(" & ");
                 // Serial.println(lets[pin]);
-                plugboard[pin] = connected;
-                plugboard[connected] = pin;
+                plugboard[nums[pin]] = nums[connected];
+                plugboard[nums[connected]] = nums[pin];
             }
         }
     }
